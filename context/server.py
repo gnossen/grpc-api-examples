@@ -27,7 +27,6 @@ async def run_server():
     server = grpc.aio.server(interceptors=(tracing_interceptor))
     server.add_insecure_port(HOST)
     user_pb2_grpc.add_UserServiceServicer_to_server(UserService(), server)
-    stop_event = server.stop_event()
     server.start()
     server_task = asyncio.create_task(server.wait_for_termination())
     await asyncio.gather(

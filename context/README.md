@@ -68,6 +68,14 @@ After gather
 default
 ```
 
+The context object gives middleware a mechanism to store arbitrary key-value
+pairs in a coroutine-local way without plumbing them through the application's
+stack from server to client. But without middleware installed, *nothing* is
+propagated by default, except timeout and cancellation, which are handled by the
+gRPC library itself.
+
+## Interceptors
+
 Ancillary to the central point of context, but included in this example out of
 necessity is a possible shape for `asyncio` interceptors. These are included
 out of necessity, to demonstrate how tracing middleware will interface with

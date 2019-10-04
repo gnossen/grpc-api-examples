@@ -38,7 +38,7 @@ class TracingInterceptor(grpc.aio.ServerInterceptor):
 
 
     async def intercept_service(self,
-                                continuation: Callable[[grpc.aio.HandlerCallDetails], None],
+                                continuation: Callable[[grpc.aio.HandlerCallDetails], grpc.aio.RpcMethodHandler],
                                 handler_call_details: grpc.aio.HandlerCallDetails) -> grpc.aio.GenericRpcHandler:
         trace_id = None
         parent_id = None

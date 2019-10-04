@@ -41,16 +41,13 @@ def probabilistic_tracing_interceptor(
         if random.random() < tracing_probability:
             # Tag this request.
 
-            # This function gets a keyed value from the coroutine-local context.
-            # Context uses contextvars, but this is an implementation
-            # detail. When a key does not exist, None is returned instead.
-            trace_id = grpc.aio.get_context_value(interceptor_common.TRACE_ID_KEY)
+            trace_id = interceptor_common.TRACE_ID_CONTEXTVAR.get()
             parent_id = None
             if trace_id is None:
                 # This request has no parent. Generate a new trace ID.
                 trace_id = interceptor_common.generate_trace_id()
             else:
-                parent_id = grpc.aio.Context.get(interceptor_common.SPAN_ID_KEY)
+                parent_id = interceptor_common.SPAN_ID_CONTEXTVAR.get()
             for key, value in ((interceptor_common.TRACE_ID_KEY, trace_id),
                                (interceptor_common.PARENT_ID_KEY, parent_id)):
                 if value is not None:

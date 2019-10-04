@@ -54,9 +54,9 @@ class TracingInterceptor(grpc.aio.ServerInterceptor):
             # Continue the RPC nonetheless.
         else:
             # Inject the tracing data into the coroutine-local context.
-            grpc.aio.set_context_value(interceptor_common.TRACE_ID_KEY, trace_id)
-            grpc.aio.set_context_value(interceptor_common.PARENT_ID_KEY, parent_id)
-            grpc.aio.set_context_value(interceptor_common.SPAN_ID_KEY, span_id)
+            interceptor_common.TRACE_ID_CONTEXTVAR.set(trace_id)
+            interceptor_common.PARENT_ID_CONTEXTVAR.set(parent_id)
+            interceptor_common.SPAN_ID_CONTEXTVAR.set(span_id)
             await _log_service_ingress(trace_id, parent_id, span_id)
         return await continuation(handler_call_details)
 

@@ -4,7 +4,6 @@ from proto import db_pb2, db_pb2_grpc
 
 HOST = '[::]:7777'
 
-RECORD_LOCK = asyncio.Lock()
 IN_MEMORY_RECORDS = {
     0: 'root',
     1: 'Kevin Flynn',
@@ -22,13 +21,12 @@ class RecordService(db_pb2_grpc.RecordServiceServicer):
             done_event.set()
         global MAX_ID
         new_id = None
-        async with RECORD_LOCK:
-            if value in _IN_MEMORY_RECORDS.values():
-                context.abort(grpc.StatusCode.ALREADY_EXISTS,
-                              f"Value '{request.value}' already exists.")
-            MAX_ID += 1
-            new_id = MAX_ID
-            IN_MEMORY_RECORDS[new_id] = request.value
+        if value in _IN_MEMORY_RECORDS.values():
+            context.abort(grpc.StatusCode.ALREADY_EXISTS,
+                          f"Value '{request.value}' already exists.")
+        MAX_ID += 1
+        new_id = MAX_ID
+        IN_MEMORY_RECORDS[new_id] = request.value
         # Pretend we have a lot more work to do here. This just demonstrates
         # what the application author must do to cooperate with cancellation.
         if done_event.is_set():

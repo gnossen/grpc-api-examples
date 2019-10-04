@@ -37,7 +37,9 @@ class TracingInterceptor(grpc.aio.ServerInterceptor):
                     logging.warning(f"Failed to send batch to server: {text}")
 
 
-    async def intercept_service(self, continuation, handler_call_details):
+    async def intercept_service(self,
+                                continuation: Callable[[grpc.aio.HandlerCallDetails], None],
+                                handler_call_details: grpc.aio.HandlerCallDetails) -> grpc.aio.GenericRpcHandler:
         trace_id = None
         parent_id = None
         span_id = interceptor_common.generate_span_id()

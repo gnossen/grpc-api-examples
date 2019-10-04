@@ -94,6 +94,7 @@ written and made avaiable gRPC interceptors in the following files:
 
  - `client_interceptors.py`
  - `server_interceptors.py`
+ - `interceptor_common.py`
 
 The only actual interaction with the context API happens in the previous two
 files. Middleware authors are the only ones expected to touch it.

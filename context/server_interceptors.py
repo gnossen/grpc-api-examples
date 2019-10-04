@@ -13,18 +13,7 @@ _TRACING_SERVER = 'tracing.grpc.io:80'
 def _encode_batch(batch: Sequence[Tuple[Text, Text, Text, float]]) -> Text:
     """Encode the events into json or something like that."""
 
-# Open Questions:
-#  - If a channel is intercepted with old-school synchronous interceptors, should
-#     the interceptor continue to work for async stub calls?
-#  - Should an async interceptor be expected to work with a synchronous call?
-#  - If the answer to either of the previous questions is no, what is the
-#     migration story for existing users? Do we stipulate that you must not mix
-#     synchronous and asynchronous calls on the same channel?
-#  - Can we somehow provide an interface that makes both kinds of interceptor
-#     work with both kinds of calls in a backwards compatible manner?
-
-# TODO: Should this actually extend a *new* asyncio class?
-class TracingInterceptor(grpc.ServerInterceptor):
+class TracingInterceptor(grpc.aio.ServerInterceptor):
 
     def __init__(self):
         self._ingress_log_queue = asyncio.Queue()

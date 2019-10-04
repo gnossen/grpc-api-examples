@@ -10,7 +10,7 @@ DB_TARGET = 'db.grpc.io:7777'
 class UserService(user_pb2_grpc.UserServiceServicer):
     def __init__(self):
         self._db_channel = grpc.intercept_channel(
-                grpc.insecure_channel(DB_TARGET),
+                grpc.aio.insecure_channel(DB_TARGET),
                 tracing_interceptors.tracing_interceptor())
 
     async def CreateUser(self,

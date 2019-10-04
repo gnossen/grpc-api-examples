@@ -9,9 +9,6 @@ import interceptor_common
 
 _DEFAULT_TRACING_PROBABLIITY = 0.5
 
-# NOTE: The library name is used in context keys to ensure we do not clash with
-# any other libraries that may be populating the context object.
-
 # NOTE: This file is meant as a stand-in for third party tracing middleware,
 # e.g. OpenCensus (https://opencensus.io/). Different libraries have different
 # opinions on the data that should be tracked by each request and what
@@ -21,8 +18,6 @@ def tracing_interceptor() -> grpc.aio.GenericClientInterceptor:
     return probabilistic_tracing_interceptor(1.0)
 
 
-# TODO: Channels are sync/async-agnostic. How do we reconcile synchronous
-# interceptors with asynchronous interceptors.
 def probabilistic_tracing_interceptor(
         tracing_probability: float = _DEFAULT_TRACING_PROBABILITY) -> grpc.aio.GenericClientInterceptor:
     """ Create an interceptor that tracks a supplied percentage of requests.

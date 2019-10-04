@@ -9,7 +9,7 @@ SERVER_TARGET = 'users.grpc.io:50051'
 async def create_user():
     tracing_interceptor = tracing_interceptors.probabilistic_tracing_interceptor()
     async with grpc.intercept_channel(
-            grpc.insecure_channel(SERVER_TARGET),
+            grpc.aio.insecure_channel(SERVER_TARGET),
             tracing_interceptor) as channel:
         stub = user_pb2_grpc.UserServiceStub(channel)
         new_user = user_pb2.CreateUserRequest(
